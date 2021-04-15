@@ -33,7 +33,7 @@ async function main()
 	let frames: string[] = [];
 
 	//Create string from pixels
-	for(let i = 0; i < 300; i++) //6572
+	for(let i = 0; i < 6572; i++) //6572
 	{
 		let pixelData: PixelData = await getPixels(`./ResizedFrames/out-${i + 1}.png`);
 		
