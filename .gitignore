@@ -1,0 +1,6 @@
+node_modules/
+dist/
+FramesCompressed/
+ResizedFrames/
+
+.env
