@@ -31,9 +31,11 @@ async function main()
 	type PixelData = {data: Uint8Array, width: number, height: number};
 	
 	let frames: string[] = [];
-
+	
+	const length = fs.readdirSync(`${__dirname}/../ResizeFrames`).length;
+	
 	//Create string from pixels
-	for(let i = 0; i < 6572; i++) //6572
+	for(let i = 0; i < length; i++) //6572
 	{
 		let pixelData: PixelData = await getPixels(`./ResizedFrames/out-${i + 1}.png`);
 		
@@ -45,14 +47,14 @@ async function main()
 		for(let j = 0; j < pixelData.data.length; j += 4)
 		{
 			// console.log(`r${pixelData.data[i]}, g${pixelData.data[i+1]}, b${pixelData.data[i+2]}\n`);
-
-			let value =  pixelData.data[j] < 15  ? "⬛" :
-						(pixelData.data[j] > 240 ? "⬜" :
-						(pixelData.data[j] < 128 ? "🔳" : "🔲"));
+			
+			let value = (pixelData.data[j]+pixelData.data[j+1]+pixelData.data[j+2])/3;
 			
 			// pixels += value;
 						
-			mes += value;
+			mes +=   value < 30  ? "⬛" :
+					(value > 225 ? "⬜" :
+					(value < 128 ? "🔳" : "🔲"));
 			
 			if(Math.floor(j/4) % 51 == 50) mes += "\n";
 		}
