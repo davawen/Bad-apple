@@ -100,7 +100,7 @@ async function main()
 						
 						if(index == clients.length-1) //If your the last bot, clean up everything
 						{
-							fs.rmdirSync(`${__dirname}/../ResizedFrames`); //Remove frames
+							fs.rmSync(`${__dirname}/../ResizedFrames`, { recursive: true, force: true }); //Remove frames
 							
 							process.exit(0); //Exit program
 						}
