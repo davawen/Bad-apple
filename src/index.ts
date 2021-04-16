@@ -120,7 +120,7 @@ async function main()
 				{
 					if(message.content.startsWith(`!${video}`))
 					{
-						await sleep(index * 180);
+						await sleep(index * 200);
 
 						while(frameIndex < frames.length)
 						{
