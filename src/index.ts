@@ -165,7 +165,7 @@ async function main()
 						{
 							message.channel.send(frames[Math.floor(frameIndex)]);
 							
-							frameIndex += 4.8; //Corrects framerate to run at real time
+							frameIndex += 6; //Corrects framerate to run at real time
 							
 							await sleep(clients.length * 200); //With 10 bots, provide 2000ms of downtime, just barely enough not to lag
 						}
