@@ -10,7 +10,8 @@ import { Client, Message, TextChannel } from 'discord.js';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-let tokens = [
+let tokens =
+[
 		process.env.DISCORD_TOKEN1,
 		process.env.DISCORD_TOKEN2,
 		process.env.DISCORD_TOKEN3,
@@ -20,45 +21,20 @@ let tokens = [
 		process.env.DISCORD_TOKEN7,
 		process.env.DISCORD_TOKEN8,
 		process.env.DISCORD_TOKEN9,
-		process.env.DISCORD_TOKEN10
-			 ];
+		process.env.DISCORD_TOKEN10,
+		process.env.DISCORD_TOKEN11,
+		process.env.DISCORD_TOKEN12,
+		process.env.DISCORD_TOKEN13
+];
 //#endregion
 			 
 
 //Select video
-let video = process.argv[2] == undefined ? "bad_apple.mp4" : process.argv[2];
+let fps = parseInt(process.argv[2]);
 
-// function hexToRgb(hex: string)
-// {
-// 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-// 	return result ? {
-// 		r: parseInt(result[1], 16),
-// 		g: parseInt(result[2], 16),
-// 		b: parseInt(result[3], 16)
-// 	} : null;
-// }
+let cooldown = 3000; //ms
 
-// class Square
-// {
-// 	hex: string;
-// 	r: number;
-// 	g: number;
-// 	b: number;
-// 	symbol: string;
-	
-// 	constructor(hex: string, symbol: string)
-// 	{
-// 		this.hex = hex;
-		
-// 		let _rgb = hexToRgb(hex);
-		
-// 		this.r  =_rgb.r;
-// 		this.b = _rgb.b;
-// 		this.g = _rgb.g;
-		
-// 		this.symbol = symbol;
-// 	}
-// }
+let video = process.argv[3] == undefined ? "bad_apple.mp4" : process.argv[3];
 
 async function sleep(time: number)
 {
@@ -78,7 +54,7 @@ async function main()
 	{
 		let pixelData: PixelData = await getPixels(`./ResizedFrames/out-${i + 1}.png`);
 		
-		let mes = "\`";
+		let mes = "\`\`\`\n";
 		
 		for(let j = 0; j < pixelData.data.length; j += 4)
 		{
@@ -92,7 +68,7 @@ async function main()
 			if(Math.floor(j/4) % 51 == 50) mes += "\n";
 		}
 		
-		frames.push(mes + "\`");
+		frames.push(mes + "\n\`\`\`");
 		
 		if(i % 200 == 0) console.log(i / length * 100 + "%"); //Only regularly update progress bar
 	}
@@ -101,7 +77,7 @@ async function main()
 
 	let clients: Client[] = [];
 
-	for(let i = 0; i < 10; i++)
+	for(let i = 0; i < 13; i++)
 	{
 		clients.push(new Client());
 
@@ -120,15 +96,15 @@ async function main()
 				{
 					if(message.content.startsWith(`!${video}`))
 					{
-						await sleep(index * 200);
+						await sleep(index * cooldown / clients.length);
 
 						while(frameIndex < frames.length)
 						{
 							message.channel.send(frames[Math.floor(frameIndex)]);
 							
-							frameIndex += 6; //Corrects framerate to run at 30 FPS
+							frameIndex += fps / (1000 / cooldown * clients.length); //Corrects framerate to run at whatever was given by user
 							
-							await sleep(clients.length * 200); //With 10 bots, provide 2000ms of downtime, just barely enough not to lag
+							await sleep(cooldown); 
 						}
 						
 						if(index == clients.length-1) //If your the last bot, clean up everything
